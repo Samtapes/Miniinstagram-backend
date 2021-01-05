@@ -3,8 +3,15 @@ const connection = require('../database/connection');
 module.exports = {
     async index(req,res) {
 
+        const { page = 1 } = req.query;
+
+
         // Getting all the posts
-        const posts = await connection('posts').select('*');
+        const posts = await connection('posts')
+            .join('favorite_post', 'favorite_post.post_id', '=', 'posts.id')
+            .limit(5)
+            .offset((page - 1) * 5)
+            .select(['posts.*', 'favorite_post.favorites']);
 
         return res.json(posts)
     },
@@ -32,6 +39,15 @@ module.exports = {
             description,
             user_id
         })
+
+
+
+        // Creating the favorite data
+        await connection('favorite_post').insert({
+            favorites: 0,
+            post_id: id
+        })
+
 
         return res.json({ id : id })
     },
@@ -76,7 +92,7 @@ module.exports = {
 
 
 
-        // Deleting all post favorites
+        // Deleting post favorites
         await connection('favorite_post').where('post_id', post_id).delete();
 
 
