@@ -5,8 +5,6 @@ module.exports = {
         const user_id = req.headers.authorization;
         const post_id = req.params.id
 
-        console.log(user_id, post_id)
-
 
         // Checking if the user exist
         const userResponse = await connection('users').where('id', user_id);

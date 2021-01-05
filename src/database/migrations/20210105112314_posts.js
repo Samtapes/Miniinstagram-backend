@@ -4,7 +4,6 @@ exports.up = function(knex) {
 
         table.string('image').notNullable();
         table.string('description', 200).notNullable();
-        table.integer('favorites').notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
 
         table.integer('user_id').unsigned().notNullable();

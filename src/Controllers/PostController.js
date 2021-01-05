@@ -30,7 +30,6 @@ module.exports = {
         const [id] = await connection('posts').insert({
             image,
             description,
-            favorites: 0,
             user_id
         })
 
@@ -74,6 +73,11 @@ module.exports = {
 
         // Deleting the post
         const response = await connection('posts').where('id', post_id).where('user_id', user_id).delete();
+
+
+
+        // Deleting all post favorites
+        await connection('favorite_post').where('post_id', post_id).delete();
 
 
 
